@@ -1,8 +1,8 @@
 function Move(name,left,top,width,height){
-  this.pixe = document.createElement("img");
-  this.pixe.src = name;
-  this.pixe.style.position = "absolute";
-  document.body.appendChild(this.pixe);
+  this._pixe = document.createElement("img");
+  this._pixe.src = name;
+  this._pixe.style.position = "absolute";
+  document.body.appendChild(this._pixe);
 
   Object.defineProperty(this,"left",{
     get: function(){
@@ -10,7 +10,7 @@ function Move(name,left,top,width,height){
     },
     set: function(valeur){
       this._left = valeur;
-      this.pixe.style.left = valeur + "vw";
+      this._pixe.style.left = valeur + "px";
     }
   });
 
@@ -20,7 +20,7 @@ function Move(name,left,top,width,height){
     },
     set: function(valeur){
       this._top = valeur;
-      this.pixe.style.top = valeur + "vw";
+      this._pixe.style.top = valeur + "px";
     }
   });
 
@@ -30,7 +30,7 @@ function Move(name,left,top,width,height){
     },
     set: function(valeur){
       this._width = valeur;
-      this.pixe.style.width = valeur + "vw";
+      this._pixe.style.width = valeur + "px";
     }
   });
 
@@ -40,16 +40,16 @@ function Move(name,left,top,width,height){
     },
     set: function(valeur){
       this._height = valeur;
-      this.pixe.style.height = valeur + "vw";
+      this._pixe.style.height = valeur + "px";
     }
   });
 
   Object.defineProperty(this, "display", {
     get: function(){
-      return this.pixe.style.display;
+      return this._pixe.style.display;
     },
     set: function(valeur){
-      this.pixe.style.display = valeur;
+      this._pixe.style.display = valeur;
     }
   });
 
@@ -60,34 +60,55 @@ function Move(name,left,top,width,height){
 }
 
 
-var vaisseau = new Move("asset/vaisseau.png",45,40,8,8);
-var alien1 = new Move("asset/aliens.png",2,2,4,4);
-var alien2 = new Move("asset/aliens.png",7,7,4,4);
-var alien2 = new Move("asset/aliens.png",2,12,4,4);
-var alien2 = new Move("asset/aliens.png",12,2,4,4);
-var alien2 = new Move("asset/aliens.png",12,12,4,4);
-var alien2 = new Move("asset/aliens.png",93,2,4,4);
-var alien2 = new Move("asset/aliens.png",83,2,4,4);
-var alien2 = new Move("asset/aliens.png",88,7,4,4);
-var alien2 = new Move("asset/aliens.png",93,12,4,4);
-var alien2 = new Move("asset/aliens.png",83,12,4,4);
+
+
+var vaisseau = new Move("asset/vaisseau.png",840,760,130,130);
+var alien1 = new Move("asset/aliens.png",60,40,90,70);
+var alien2 = new Move("asset/aliens.png",260,40,90,70);
+var alien3 = new Move("asset/aliens.png",60,250,90,70);
+var alien4 = new Move("asset/aliens.png",260,250,90,70);
+var alien4 = new Move("asset/aliens.png",160,150,90,70);
+
+var alien1 = new Move("asset/aliens.png",1340,40,90,70);
+var alien2 = new Move("asset/aliens.png",1540,40,90,70);
+var alien3 = new Move("asset/aliens.png",1340,250,90,70);
+var alien4 = new Move("asset/aliens.png",1540,250,90,70);
+var alien4 = new Move("asset/aliens.png",1440,150,90,70);
+
 
 
 document.onkeydown = function(event){
-  console.log(event.keyCode);
+ 
   if (event.keyCode == 38) {  //haut
-    vaisseau.top -= 1;
+    vaisseau.top -= 100
   }
   if (event.keyCode == 40) { //bas
-    vaisseau.top += 1
+    vaisseau.top += 100
   }
   if (event.keyCode == 39) { //droite
-    vaisseau.left += 1
+    vaisseau.left += 100
   }
   if (event.keyCode == 37) { //gauche
-    vaisseau.left -= 1
+    vaisseau.left -= 100
   }
-  if (vaisseau.left < 0) vaisseau.left = 0;
+  if (vaisseau.left < 0) {
+    vaisseau.left = 0;
+  } 
+  if (vaisseau.left >= document.body.clientWidth  - vaisseau.width ) {
+    vaisseau.left = document.body.clientWidth - vaisseau.width ;
+  }
+  if (vaisseau.top < 0 ) {
+    vaisseau.top = 0;
+  }
+  if (vaisseau.top > document.body.clientHeight  - vaisseau.height ) {
+    vaisseau.height = document.body.clientHeight - vaisseau.height  ;
+  }
+      
 };
+
+console.log(document.body.clientHeight );
+
+
+
 
 
