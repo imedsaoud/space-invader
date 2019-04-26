@@ -65,6 +65,7 @@ Sprite.prototype.startAnimation = function (fct , interval) {
   this._clock = window.setInterval(function(){
     fct(_this);
   }, interval);
+  console.log(this._clock);
 };
 
 Sprite.prototype.stopAnimation = function() {
@@ -79,7 +80,7 @@ Sprite.prototype.checkCollision = function ( other ) {
        this.left > (other.left + other._pixe.width)
     );
 }
-
+// Création de nos élements | Vaisseau | Alien | Missile 
 var vaisseau = new Sprite("asset/vaisseau.png",765,760,130,130);
 var alien1 = new Sprite("asset/aliens.png",60,40,90,70);
 var alien2 = new Sprite("asset/aliens.png",260,40,90,70);
@@ -94,6 +95,7 @@ var alien10 = new Sprite("asset/aliens.png",1440,150,90,70);
 var missile = new Sprite("asset/missile.png",0,0,50,80);
 missile.display = 'none';
 
+// Configuration des touches de jeu | 
 
 document.onkeydown = function(event){
  
@@ -154,16 +156,22 @@ function moveMissile (missile) {
     }
   }
 }
-function moveAlienToLeft (alien) {
-  alien.left -= 5;
+
+
+function moveAlienToLeft (alien , vertical) {
+  alien.left -= 200;
   if (alien.left <= 0) {
      alien.top += 50;
      alien.startAnimation(moveAlienToRight , 20)
   }
+
+  if(alien.top > window.innerHeight - alien.height ) {
+    alien.top = window.innerHeight - alien.height;
+  }
 }
 
-function moveAlienToRight (alien) {
-  alien.left += 5;
+function moveAlienToRight (alien ) {
+  alien.left += 200;
   if (alien.left > document.body.clientWidth - alien.width) {
      alien.top += 50;
      alien.startAnimation(moveAlienToLeft , 20)
