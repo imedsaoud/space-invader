@@ -67,28 +67,32 @@ Sprite.prototype.startAnimation = function (fct , interval) {
   }, interval);
 };
 
+Sprite.prototype.stopAnimation = function() {
+  window.clearInterval(this._clock);
+}
 
-
-
-
-
+Sprite.prototype.checkCollision = function ( other ) {
+    return ! (
+      (this.top + this.height < other.top) || 
+       this.top > (other.top + other._pixe.height) ||
+       (this.left + this.width < other.left) ||
+       this.left > (other.left + other._pixe.width)
+    );
+}
 
 var vaisseau = new Sprite("asset/vaisseau.png",765,760,130,130);
-
 var alien1 = new Sprite("asset/aliens.png",60,40,90,70);
 var alien2 = new Sprite("asset/aliens.png",260,40,90,70);
 var alien3 = new Sprite("asset/aliens.png",60,250,90,70);
 var alien4 = new Sprite("asset/aliens.png",260,250,90,70);
-var alien4 = new Sprite("asset/aliens.png",160,150,90,70);
-var alien5 = new Sprite("asset/aliens.png",1340,40,90,70);
-var alien6 = new Sprite("asset/aliens.png",1540,40,90,70);
-var alien7 = new Sprite("asset/aliens.png",1340,250,90,70);
-var alien8 = new Sprite("asset/aliens.png",1540,250,90,70);
-var alien9 = new Sprite("asset/aliens.png",1440,150,90,70);
-
+var alien5 = new Sprite("asset/aliens.png",160,150,90,70);
+var alien6 = new Sprite("asset/aliens.png",1340,40,90,70);
+var alien7 = new Sprite("asset/aliens.png",1540,40,90,70);
+var alien8 = new Sprite("asset/aliens.png",1340,250,90,70);
+var alien9 = new Sprite("asset/aliens.png",1540,250,90,70);
+var alien10 = new Sprite("asset/aliens.png",1440,150,90,70);
 var missile = new Sprite("asset/missile.png",0,0,50,80);
 missile.display = 'none';
-
 
 
 document.onkeydown = function(event){
@@ -118,19 +122,64 @@ document.onkeydown = function(event){
     vaisseau.top = window.innerHeight - vaisseau.height  ;
   }
   if (event.keyCode == 101 || event.keyCode == 32) {
-    missile.display = "block";
-    missile.left = vaisseau.left + (vaisseau.width - missile.width) / 2;
-    missile.top = vaisseau.top;
-    missile.startAnimation(moveMissile , 20);
+    if (missile.display == "none") {
+        missile.display = "block";
+        missile.left = vaisseau.left + (vaisseau.width - missile.width) / 2;
+        missile.top = vaisseau.top;
+        missile.startAnimation(moveMissile , 20);
+    }
   }
 };
 
-function moveMissile ( missile ) {
+
+
+
+function moveMissile (missile) {
+  
   missile.top -= 10;
-  if ( missile.top < -40) {
+  
+  if ( missile.top < -80 ) {
     missile.stopAnimation();
+    missile.display = "none";
   } 
+ 
+  for (var i=1;i<=15; i++) {
+    var alien = window["alien" + i];
+    if ( alien.display == "none") continue;
+    if (missile.checkCollision(alien)) {
+      missile.stopAnimation();
+      missile.display = "none";
+      alien.stopAnimation();
+      alien.display = "none";
+    }
+  }
 }
+function moveAlienToLeft (alien) {
+  alien.left -= 5;
+  if (alien.left <= 0) {
+     alien.top += 50;
+     alien.startAnimation(moveAlienToRight , 20)
+  }
+}
+
+function moveAlienToRight (alien) {
+  alien.left += 5;
+  if (alien.left > document.body.clientWidth - alien.width) {
+     alien.top += 50;
+     alien.startAnimation(moveAlienToLeft , 20)
+  }
+}
+
+for (var i = 1; i <= 10; i++) {
+  window["alien"+i].startAnimation(moveAlienToRight , 20)
+}
+
+
+
+
+
+
+
 
 
 
